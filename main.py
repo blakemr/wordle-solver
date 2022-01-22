@@ -12,7 +12,7 @@ def solve(word_list: list, secret_word: str):
     guesses = 1
     while True:
         # Find word that hints at the max number of words
-        guess = choose_word(word_list)
+        guess = choose_word(word_list, 1)
         print("Guess number {} is '{}'".format(guesses, guess.upper()))
 
         # Make guess
@@ -109,8 +109,19 @@ def max_coverage_word(word_list: list) -> str:
 
     cache the answers to be use between uses.
     """
+    best_word = word_list[0]
+    best_word_score = 0
 
-    pass
+    for word in word_list:
+        score = 0
+        for checked_word in word_list:
+            score += any(letter in checked_word for letter in word)
+
+        if score > best_word_score:
+            best_word = word
+            best_word_score = score
+
+    return best_word
 
 
 if __name__ == "__main__":
