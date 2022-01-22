@@ -12,7 +12,7 @@ def solve(word_list: list, secret_word: str):
     guesses = 1
     while True:
         # Find word that hints at the max number of words
-        guess = analyze_word_list(word_list)
+        guess = choose_word(word_list)
         print("Guess number {} is '{}'".format(guesses, guess.upper()))
 
         # Make guess
@@ -26,7 +26,8 @@ def solve(word_list: list, secret_word: str):
         elif -1 in guess_match:
             raise ValueError("Something went wrong with the Wordle check. -1 in result")
 
-        # Trim invalid words from list
+        # Trim invalid words from list.
+        # TODO - Add alternate coverage methods.
         for i, letter in enumerate(guess):
             if guess_match[i] == 0:
                 word_list = [word for word in word_list if letter not in word]
@@ -85,17 +86,31 @@ def wordle(guess: str, secret_word: str):
     return output
 
 
-def analyze_word_list(word_list: list) -> str:
-    """Chooses word that gives the most information about the given list
+def choose_word(word_list: list, mode=0) -> str:
+    """Chooses word based on desired method
 
     args:
         word_list: list - list of words to choose from
+        mode: int - choice method
+            0: random choice
+            1: max coverage choice
 
     returns:
         str: best word to use
     """
-    # For now, make this random. its the meat of this project
-    return choice(word_list)
+    if mode == 0:
+        return choice(word_list)
+    elif mode == 1:
+        return max_coverage_word(word_list)
+
+
+def max_coverage_word(word_list: list) -> str:
+    """Chooses word that covers the most words in the list
+
+    cache the answers to be use between uses.
+    """
+
+    pass
 
 
 if __name__ == "__main__":
